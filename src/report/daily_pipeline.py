@@ -167,6 +167,12 @@ def main():
         report_id = create_report(data_source_id)
 
         print("Report queued with ID:", report_id)
+        
+        # Write report ID to a file so the build script can pick it up
+        with open("report_id.txt", "w") as f:
+            f.write(report_id)
+        print("Report ID saved to report_id.txt")
+        
     except Exception as e:
         print(f"Error occurred: {e}")
         delete_file_from_repo(csv_file)

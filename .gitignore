@@ -36,6 +36,9 @@ ENV/
 datasets/
 *.csv
 
+# Temporary build files
+report_id.txt
+
 # IDEs and editors
 .vscode/
 .idea/

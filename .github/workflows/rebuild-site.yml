@@ -1,16 +1,13 @@
-name: Daily Data Report
+name: Rebuild Static Site
 
 on:
-  schedule:
-    # Runs at 6:00 AM UTC every day
-    - cron: '0 6 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  generate-report:
+  rebuild-site:
     runs-on: ubuntu-latest
     
     steps:
@@ -36,39 +33,17 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
     
-    - name: Get yesterday's date
-      id: get-date
-      run: |
-        YESTERDAY=$(date -d "yesterday" +%Y-%m-%d)
-        echo "yesterday=$YESTERDAY" >> $GITHUB_OUTPUT
-        echo "Running pipeline for date: $YESTERDAY"
-    
-    - name: Run daily pipeline
-      env:
-        APP_TOKEN: ${{ secrets.APP_TOKEN }}
-        API_KEY: ${{ secrets.API_KEY }}
-        DATE: ${{ steps.get-date.outputs.yesterday }}
-      run: |
-        python src/report/daily_pipeline.py
-    
     - name: Build static site
       env:
         API_KEY: ${{ secrets.API_KEY }}
         API_BASE: https://app.southwind.ai/api
       run: |
-        # Get the report ID from the file created by the pipeline
-        if [ -f report_id.txt ]; then
-          export NEW_REPORT_ID=$(cat report_id.txt)
-          echo "Building site and waiting for report: $NEW_REPORT_ID"
-        else
-          echo "Building site with existing reports"
-        fi
         python src/site/build_site.py
     
     - name: Commit and push static site
       run: |
         git add src/site/index.html
-        git diff --staged --quiet || git commit -m "Update static site with latest reports"
+        git diff --staged --quiet || git commit -m "Rebuild static site"
         git push
     
     - name: Deploy to Cloudflare Pages

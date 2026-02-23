@@ -71,6 +71,41 @@ All options are set via `.env` (see `.env.example`):
 4. Drops and renames columns per configuration
 5. Writes the result to a CSV file
 
+## Case Study Website
+
+A static website is included in `src/site/` that displays all generated reports with a clean, modern interface.
+
+### How It Works
+
+The website is **completely static** - no backend server required! Report links are embedded at build time:
+
+1. GitHub Actions workflow fetches new data and creates a report
+2. Build script polls until the report is complete
+3. All report embed URLs are fetched and embedded into the HTML
+4. Static `index.html` is generated and deployed to Cloudflare Pages
+
+### Building the Site Locally
+
+```bash
+# Make sure API_KEY is set in your .env file
+cd src/site
+python3 build_site.py
+
+# View the generated site
+python3 -m http.server 8000
+# Open http://localhost:8000/index.html
+```
+
+See [`src/site/README.md`](src/site/README.md) for detailed documentation.
+
+### Website Features
+
+- ✅ **Fully static** - No backend, instant loading from CDN
+- ✅ **Secure** - API key never exposed to clients
+- ✅ **Auto-updated** - Rebuilt daily by GitHub Actions
+- ✅ **Modern design** - Clean, responsive interface
+- ✅ **Italian localization** - Date formatting and content in Italian
+
 ## License
 
 MIT
