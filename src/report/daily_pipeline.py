@@ -125,7 +125,7 @@ def create_report(data_source_id):
                 "dataset_info": "",
                 "data_provenance": False,
             },
-            "improve_prompt": False,
+            "improve_prompt": True,
         },
     )
 
