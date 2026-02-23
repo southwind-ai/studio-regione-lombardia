@@ -13,7 +13,7 @@ load_dotenv()
 API_BASE = "http://localhost:8000/api"
 API_KEY = os.getenv("API_KEY", "")
 
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/southwind-ai/studio-regione-lombardia/main/"
+GITHUB_RAW_BASE = "https://raw.githubusercontent.com/southwind-ai/studio-regione-lombardia/refs/heads/main/"
 
 
 def wait_for_file_availability(file_url, max_attempts=20, delay=5):
@@ -100,7 +100,14 @@ def create_data_source(file_url):
         print(error_msg)
         raise Exception(error_msg)
     
-    return response_data["created_data_origins"][0]["id"]
+    data_origin = response_data["created_data_origins"][0]
+    if "data_sources" not in data_origin or not data_origin["data_sources"]:
+        error_msg = f"No data sources in response: {response_data}"
+        print(error_msg)
+        raise Exception(error_msg)
+    
+    # Return the data source ID
+    return data_origin["data_sources"][0]["id"]
 
 
 def create_report(data_source_id):
