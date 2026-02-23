@@ -129,8 +129,9 @@ def get_report_embed_url(task_id):
 def format_italian_date(date_string):
     """Format date string in Italian."""
     try:
-        date_obj = datetime.fromisoformat(date_string.replace('Z', '+00:00'))
-        days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato']
+        from datetime import timedelta
+        date_obj = datetime.fromisoformat(date_string.replace('Z', '+00:00')) - timedelta(days=1)
+        days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']
         months = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 
                   'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
         
