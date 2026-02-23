@@ -21,7 +21,6 @@ def wait_for_file_availability(file_url, max_attempts=20, delay=5):
     print(f"Waiting for file to be available at: {file_url}")
     for attempt in range(1, max_attempts + 1):
         try:
-            # Use GET with stream=True (doesn't download full file, just checks availability)
             response = requests.get(file_url, timeout=10, stream=True)
             if response.status_code == 200:
                 print(f"✓ File is now accessible (attempt {attempt})")
@@ -46,7 +45,6 @@ def push_to_github(file_path):
     """Push a file to GitHub. file_path should be relative to repo root."""
     project_root = get_project_root()
     try:
-        # Use -f flag to force-add files from ignored directories
         subprocess.run(["git", "add", "-f", file_path], cwd=project_root, check=True)
         subprocess.run(["git", "commit", "-m", f"Daily dataset {file_path}"], cwd=project_root, check=True)
         subprocess.run(["git", "push"], cwd=project_root, check=True)
@@ -140,13 +138,17 @@ def create_report(data_source_id):
 
 
 def main():
-    today = datetime.date.today().isoformat()
-    ## Date must be in format YYYY-MM-DD
-    today = today.split("-")
-    today = today[0] + "-" + today[1] + "-" + today[2]
+    date_to_fetch = os.getenv("DATE", "")
+    if not date_to_fetch:
+        # Default to yesterday's date for daily reports
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        date_to_fetch = yesterday.isoformat()
+        print(f"No DATE specified, using yesterday: {date_to_fetch}")
+    else:
+        print(f"Using DATE from environment: {date_to_fetch}")
 
     print("Fetching data...")
-    csv_file = fetch_data(today)
+    csv_file = fetch_data(date_to_fetch)
 
     print("Pushing to GitHub...")
     push_to_github(csv_file)
