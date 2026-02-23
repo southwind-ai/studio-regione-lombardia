@@ -16,24 +16,26 @@ API_KEY = os.getenv("API_KEY", "")
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/southwind-ai/studio-regione-lombardia/main/"
 
 
-def wait_for_file_availability(file_url, max_attempts=10, delay=3):
+def wait_for_file_availability(file_url, max_attempts=20, delay=5):
     """Wait for a file to be accessible via URL before proceeding."""
     print(f"Waiting for file to be available at: {file_url}")
     for attempt in range(1, max_attempts + 1):
         try:
-            response = requests.head(file_url, timeout=5)
+            # Use GET with stream=True (doesn't download full file, just checks availability)
+            response = requests.get(file_url, timeout=10, stream=True)
             if response.status_code == 200:
-                print(f"File is now accessible (attempt {attempt})")
+                print(f"✓ File is now accessible (attempt {attempt})")
+                response.close()
                 return True
-        except requests.RequestException:
-            pass
+            else:
+                print(f"Attempt {attempt}/{max_attempts}: Status {response.status_code}, waiting {delay}s...")
+        except requests.RequestException as e:
+            print(f"Attempt {attempt}/{max_attempts}: {type(e).__name__}, waiting {delay}s...")
         
         if attempt < max_attempts:
-            print(f"Attempt {attempt}/{max_attempts}: File not yet available, waiting {delay}s...")
             time.sleep(delay)
     
-    print(f"Warning: File still not accessible after {max_attempts} attempts")
-    return False
+    raise Exception(f"File not accessible after {max_attempts * delay}s (GitHub CDN propagation timeout)")
 
 def get_project_root():
     """Get the project root directory."""
