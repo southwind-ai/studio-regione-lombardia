@@ -10,7 +10,7 @@ from query import fetch_data
 
 load_dotenv()
 
-API_BASE = "https://app.southwind.ai/api"
+API_BASE = os.getenv("API_BASE", "https://app.southwind.ai/api")
 API_KEY = os.getenv("API_KEY", "")
 
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/southwind-ai/studio-regione-lombardia/refs/heads/main/"
