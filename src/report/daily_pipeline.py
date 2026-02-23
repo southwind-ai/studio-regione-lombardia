@@ -3,13 +3,37 @@ import subprocess
 import datetime
 import sys
 import os
+import time
 
+from dotenv import load_dotenv
 from query import fetch_data
 
+load_dotenv()
 
 API_BASE = "http://localhost:8000/api"
+API_KEY = os.getenv("API_KEY", "")
 
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/southwind-ai/lombardia-pagamenti/main/"
+GITHUB_RAW_BASE = "https://raw.githubusercontent.com/southwind-ai/studio-regione-lombardia/main/"
+
+
+def wait_for_file_availability(file_url, max_attempts=10, delay=3):
+    """Wait for a file to be accessible via URL before proceeding."""
+    print(f"Waiting for file to be available at: {file_url}")
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = requests.head(file_url, timeout=5)
+            if response.status_code == 200:
+                print(f"File is now accessible (attempt {attempt})")
+                return True
+        except requests.RequestException:
+            pass
+        
+        if attempt < max_attempts:
+            print(f"Attempt {attempt}/{max_attempts}: File not yet available, waiting {delay}s...")
+            time.sleep(delay)
+    
+    print(f"Warning: File still not accessible after {max_attempts} attempts")
+    return False
 
 def get_project_root():
     """Get the project root directory."""
@@ -43,8 +67,13 @@ def delete_file_from_repo(file_path):
 
 
 def create_data_source(file_url):
+    headers = {}
+    if API_KEY:
+        headers["X-API-Key"] = API_KEY
+    
     response = requests.post(
         f"{API_BASE}/v1/data-sources/file/",
+        headers=headers,
         json={
             "files": [
                 {
@@ -56,16 +85,30 @@ def create_data_source(file_url):
     )
 
     if response.status_code != 201:
-        error_msg = f"Data source creation failed: {response.text}"
+        error_msg = f"Data source creation failed (status {response.status_code}): {response.text}"
         print(error_msg)
         raise Exception(error_msg)
 
-    return response.json()["created_data_origins"][0]["id"]
+    response_data = response.json()
+    print(f"Data source response: {response_data}")
+    
+    # Check if the expected structure exists
+    if "created_data_origins" not in response_data or not response_data["created_data_origins"]:
+        error_msg = f"Unexpected API response structure: {response_data}"
+        print(error_msg)
+        raise Exception(error_msg)
+    
+    return response_data["created_data_origins"][0]["id"]
 
 
 def create_report(data_source_id):
+    headers = {}
+    if API_KEY:
+        headers["X-API-Key"] = API_KEY
+    
     response = requests.post(
         f"{API_BASE}/v1/reports/",
+        headers=headers,
         json={
             "data_sources_ids": [data_source_id],
             "params": {
@@ -100,6 +143,10 @@ def main():
     push_to_github(csv_file)
 
     file_url = GITHUB_RAW_BASE + csv_file
+    
+    # Wait for GitHub to make the file accessible via raw URL
+    if not wait_for_file_availability(file_url):
+        print("Warning: Proceeding anyway, but file may not be accessible yet")
 
     try:
         print("Creating data source...")
