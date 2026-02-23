@@ -56,8 +56,9 @@ def create_data_source(file_url):
     )
 
     if response.status_code != 201:
-        print("Data source creation failed:", response.text)
-        sys.exit(1)
+        error_msg = f"Data source creation failed: {response.text}"
+        print(error_msg)
+        raise Exception(error_msg)
 
     return response.json()["created_data_origins"][0]["id"]
 
@@ -79,8 +80,9 @@ def create_report(data_source_id):
     )
 
     if response.status_code != 201:
-        print("Report creation failed:", response.text)
-        sys.exit(1)
+        error_msg = f"Report creation failed: {response.text}"
+        print(error_msg)
+        raise Exception(error_msg)
 
     return response.json()["id"]
 
