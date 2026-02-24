@@ -1,10 +1,13 @@
 import csv
 import os
 import sys
+import time
 from datetime import datetime
 
 from dotenv import load_dotenv
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 load_dotenv()
 
@@ -12,6 +15,25 @@ APP_TOKEN = os.getenv("APP_TOKEN", "")
 
 ENDPOINT = os.getenv("ENDPOINT", "https://www.dati.lombardia.it/resource/78vt-im2v.json")
 LIMIT = 1000
+
+MAX_RETRIES = 5
+BACKOFF_FACTOR = 2  # waits 2, 4, 8, 16... seconds between retries
+
+
+def _build_session():
+    """Build a requests Session with automatic retry on transient errors."""
+    session = requests.Session()
+    retry = Retry(
+        total=MAX_RETRIES,
+        backoff_factor=BACKOFF_FACTOR,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"],
+        raise_on_status=False,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+    return session
 
 
 def parse_date(date_str):
@@ -43,13 +65,23 @@ def fetch_all_records(date_ts):
         "$limit": LIMIT,
     }
 
+    session = _build_session()
     all_records = []
     offset = 0
 
     while True:
         params = {**params_base, "$offset": offset}
-        resp = requests.get(ENDPOINT, headers=headers, params=params)
-        resp.raise_for_status()
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                resp = session.get(ENDPOINT, headers=headers, params=params, timeout=60)
+                resp.raise_for_status()
+                break
+            except requests.exceptions.ConnectionError as e:
+                if attempt == MAX_RETRIES:
+                    raise
+                wait = BACKOFF_FACTOR ** attempt
+                print(f"Connection error at offset {offset} (attempt {attempt}/{MAX_RETRIES}), retrying in {wait}s: {e}")
+                time.sleep(wait)
         batch = resp.json()
         if not batch:
             break
