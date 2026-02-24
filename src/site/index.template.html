@@ -11,6 +11,10 @@
     href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap"
     rel="stylesheet">
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
     :root {
       --bg: #f4f7fc;
       --surface: #ffffff;
@@ -264,6 +268,609 @@
       opacity: 0.4;
     }
 
+    /* ── Before / After comparison ───────────────────────────── */
+
+    .section.compare {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section.compare .section__inner {
+      max-width: 1080px;
+    }
+
+    .compare__title {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 2rem;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 48px;
+    }
+
+    .compare__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .compare__panel {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .compare__label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare__label-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .compare__panel--before .compare__label {
+      background: #fff8f7;
+      color: #b34040;
+    }
+
+    .compare__panel--before .compare__label-dot {
+      background: #e05252;
+    }
+
+    .compare__panel--after .compare__label {
+      background: #f3fbf6;
+      color: #2a7a4f;
+    }
+
+    .compare__panel--after .compare__label-dot {
+      background: #34a863;
+    }
+
+    /* Raw table (Before) */
+
+    .raw-table-wrap {
+      overflow: auto;
+      max-height: 300px;
+      position: relative;
+    }
+
+    .raw-table-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--surface));
+      pointer-events: none;
+    }
+
+    .raw-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .raw-table thead th {
+      background: #f9f9fb;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 500;
+      color: var(--muted);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .raw-table tbody tr:nth-child(even) {
+      background: #fafbfd;
+    }
+
+    .raw-table tbody td {
+      padding: 7px 12px;
+      border-bottom: 1px solid #eef2f8;
+    }
+
+    .raw-table-footer {
+      padding: 10px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: #fafbfd;
+    }
+
+    /* Report preview (After) */
+
+    .report-preview {
+      padding: 20px;
+    }
+
+    .rp-header {
+      margin-bottom: 20px;
+    }
+
+    .rp-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .rp-title {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 1.2rem;
+      color: var(--text);
+    }
+
+    .rp-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .rp-kpi {
+      background: var(--chip-bg);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .rp-kpi__label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .rp-kpi__value {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .rp-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .rp-bars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 20px;
+      align-items: end;
+    }
+
+    .rp-bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .rp-bar-chart-area {
+      width: 100%;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .rp-bar-pct {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .rp-bar-fill {
+      width: 72%;
+      background: var(--accent);
+      border-radius: 3px 3px 0 0;
+      min-height: 4px;
+    }
+
+    .rp-bar-base {
+      width: 100%;
+      height: 1px;
+      background: var(--chip-bg);
+      margin-top: 0;
+    }
+
+    .rp-bar-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      color: var(--text);
+      text-align: center;
+      margin-top: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .rp-insight {
+      background: linear-gradient(135deg, #eef5ff 0%, #e8f0fb 100%);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 12px 14px;
+    }
+
+    .rp-insight__label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .rp-insight__text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .compare__caption {
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: #fafbfd;
+      line-height: 1.5;
+    }
+
+    /* ── Shared section typography ──────────────────────────── */
+
+    .section__title {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 2rem;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .section__subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 48px;
+      max-width: 560px;
+    }
+
+    /* ── Hero (full-width, single column) ────────────────────── */
+
+    .hero__inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero__inner h1 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 2.8rem;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    .hero__cta--primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .hero__cta--primary:hover {
+      background: var(--accent-h);
+      border-color: var(--accent-h);
+      color: #ffffff;
+    }
+
+    /* ── Insights ────────────────────────────────────────────── */
+
+    .section.insights {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .insights__inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .insights__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .insight-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+    }
+
+    .insight-card__finding {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 1.15rem;
+      line-height: 1.4;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .insight-card__context {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Difficulty ──────────────────────────────────────────── */
+
+    .section.difficulty {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .difficulty__list {
+      list-style: none;
+      margin: 24px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .difficulty__list li {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--text);
+      padding-left: 22px;
+      position: relative;
+      line-height: 1.7;
+    }
+
+    .difficulty__list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .difficulty__callout {
+      margin-top: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 20px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── How It Works ────────────────────────────────────────── */
+
+    .section.howto {
+      background: var(--surface);
+    }
+
+    .howto__inner {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      list-style: none;
+      margin-top: 48px;
+    }
+
+    .step {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .step__num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      flex-shrink: 0;
+      padding-top: 3px;
+      min-width: 28px;
+    }
+
+    .step__title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .step__desc {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── Archive ─────────────────────────────────────────────── */
+
+    .section.archive {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+
+    .archive__inner {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .archive__inner h2 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 2rem;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    /* ── Final CTA ───────────────────────────────────────────── */
+
+    .section.dark-cta {
+      background: var(--text);
+    }
+
+    .dark-cta__title {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 2.2rem;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .dark-cta__body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.7;
+    }
+
+    .section.dark-cta .eyebrow {
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .cta-group--centered {
+      margin-top: 32px;
+    }
+
+    .hero__cta--white {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.7);
+      background: transparent;
+    }
+
+    .hero__cta--white:hover {
+      background: #ffffff;
+      color: var(--text);
+      border-color: #ffffff;
+    }
+
+    .hero__cta--white-outline {
+      color: rgba(255, 255, 255, 0.6);
+      border-color: rgba(255, 255, 255, 0.25);
+      background: transparent;
+    }
+
+    .hero__cta--white-outline:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ── Scroll-to-next button ───────────────────────────────── */
+
+    @keyframes bounce-arrow {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(5px);
+      }
+    }
+
+    .scroll-next {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 1rem;
+      line-height: 1;
+      flex-shrink: 0;
+      align-self: center;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .scroll-next:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      animation: bounce-arrow 0.6s ease infinite;
+    }
+
+    /* variant for dark-bg sections */
+    .scroll-next--light {
+      border-color: rgba(255, 255, 255, 0.25);
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .scroll-next--light:hover {
+      border-color: rgba(255, 255, 255, 0.7);
+      color: #ffffff;
+    }
+
+    .section__scroll {
+      margin-top: 40px;
+    }
+
     @media (max-width: 900px) {
       .landing__grid {
         grid-template-columns: 1fr;
@@ -277,6 +884,14 @@
         border-top: 1px solid var(--border);
         padding-top: 48px;
       }
+
+      .compare__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .insights__grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 600px) {
@@ -288,11 +903,16 @@
         padding: 48px 24px;
       }
 
-      .landing__left h1 {
+      .landing__left h1,
+      .hero__inner h1 {
         font-size: 2rem;
       }
 
       .landing__right h2 {
+        font-size: 1.6rem;
+      }
+
+      .dark-cta__title {
         font-size: 1.6rem;
       }
 
@@ -313,7 +933,7 @@
 
   <header class="site-header">
     <div class="site-header__inner">
-      <a href="/" class="wordmark" aria-label="Southwind AI">
+      <a href="https://southwind.ai" class="wordmark" aria-label="Southwind AI">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1306.63 598.79" aria-hidden="true" focusable="false">
           <path fill="#2871cc"
             d="M334.51,459.33a48.62,48.62,0,0,1-19.72-15,39.41,39.41,0,0,1-8.1-21.36h37a14.22,14.22,0,0,0,5.91,10.3,20.93,20.93,0,0,0,12.93,3.94q7,0,10.85-2.74a8.38,8.38,0,0,0,3.83-7.12q0-5.25-5.48-7.78T354,414a166.45,166.45,0,0,1-21.91-6.47A37.89,37.89,0,0,1,317,396.78q-6.35-7.35-6.35-19.83a33.63,33.63,0,0,1,5.81-19.18q5.81-8.64,17.09-13.69t26.84-5q23,0,36.26,11.39t15.23,30.24H377.24a15,15,0,0,0-5.59-10.08q-4.71-3.72-12.38-3.72-6.57,0-10.08,2.52a8,8,0,0,0-3.5,6.9c0,3.51,1.86,6.13,5.58,7.89s9.54,3.5,17.42,5.26a187.48,187.48,0,0,1,22.13,6.9,38.1,38.1,0,0,1,15,11q6.46,7.56,6.69,20.27a32.13,32.13,0,0,1-6,19.17q-6,8.44-17.31,13.26T363,464.81Q347,464.81,334.51,459.33Zm124.35-2.19a56.11,56.11,0,0,1-22.57-21.91q-8.22-14.24-8.22-33.3,0-18.85,8.33-33.2a56.47,56.47,0,0,1,22.79-22,72.37,72.37,0,0,1,64.85,0,56.47,56.47,0,0,1,22.79,22q8.32,14.36,8.33,33.2t-8.44,33.19a57,57,0,0,1-23,22,68.67,68.67,0,0,1-32.53,7.67Q473.21,464.81,458.86,457.14Zm50.61-32.65Q517,416.6,517,401.93t-7.34-22.57a24.89,24.89,0,0,0-36.26-.11q-7.23,7.77-7.23,22.68,0,14.67,7.12,22.56a23,23,0,0,0,17.86,7.89A24.41,24.41,0,0,0,509.47,424.49Zm186.35-83.7V463.06H658.36V446.4a41.14,41.14,0,0,1-15.45,13,47.11,47.11,0,0,1-21.58,4.93,48.35,48.35,0,0,1-24.76-6.24,42.18,42.18,0,0,1-16.66-18.08Q574,428.22,574,412.22V340.79h37.25v66.39q0,12.29,6.35,19.07T634.69,433q10.95,0,17.31-6.79t6.36-19.07V340.79Zm95.1,90.5v31.77H771.85q-20.37,0-31.77-10t-11.39-32.54V371.91h-14.9V340.79h14.9V311h37.47v29.8H790.7v31.12H766.16V421c0,3.65.87,6.28,2.63,7.89s4.67,2.41,8.76,2.41Zm129.71-77.9q12.71,13.92,12.71,38.24v71.43H896.09V396.67q0-12.27-6.36-19.07t-17.09-6.79q-10.74,0-17.09,6.79t-6.35,19.07v66.39H811.73V300.91H849.2v56.32a40,40,0,0,1,15.56-12.93,49.73,49.73,0,0,1,22.13-4.82Q907.92,339.48,920.63,353.39Zm214.29-12.6-33.09,122.27h-41.41l-19.28-79.32-19.94,79.32H980L946.7,340.79h37.47l17.31,87.43,20.6-87.43h39.66l20.81,87,17.09-87Zm17-18.51a18.8,18.8,0,0,1-6.25-14.35,19,19,0,0,1,6.25-14.57q6.24-5.81,16.1-5.81,9.64,0,15.89,5.81a19.07,19.07,0,0,1,6.24,14.57,18.83,18.83,0,0,1-6.24,14.35q-6.26,5.81-15.89,5.8Q1158.15,328.08,1151.9,322.28Zm34.73,18.51V463.06h-37.47V340.79Zm135.95,12.6q12.83,13.92,12.82,38.24v71.43h-37.25V396.67q0-12.27-6.35-19.07t-17.09-6.79q-10.74,0-17.09,6.79t-6.36,19.07v66.39H1213.8V340.79h37.46V357a39.49,39.49,0,0,1,15.34-12.82,48.78,48.78,0,0,1,21.69-4.71Q1309.77,339.48,1322.58,353.39Zm38.57,15.23a53.07,53.07,0,0,1,19.39-21.91,50.65,50.65,0,0,1,27.39-7.67,48.12,48.12,0,0,1,22,5,40.14,40.14,0,0,1,15.66,13.58V300.91h37.47V463.06h-37.47V445.53a38.15,38.15,0,0,1-15,14q-9.77,5.26-22.68,5.26a50.06,50.06,0,0,1-27.39-7.78,53.65,53.65,0,0,1-19.39-22.13q-7.12-14.34-7.12-33.19T1361.15,368.62Zm76.69,11.18a26.33,26.33,0,0,0-37.91-.11q-7.79,8-7.78,22t7.78,22.24a26.1,26.1,0,0,0,37.91.1q7.77-8.1,7.77-22.12T1437.84,379.8Z"
@@ -335,45 +955,305 @@
 
   <main class="main-content">
 
-    <section class="section landing">
-      <div class="landing__grid">
+    <!-- Hero: The Problem -->
+    <section class="section">
+      <div class="hero__inner">
+        <p class="eyebrow">Caso Studio</p>
+        <h1>Ogni giorno, dati pubblici ignorati da tutti.<br>Noi li abbiamo trasformati in insight.</h1>
 
-        <div class="landing__left">
-          <p class="eyebrow">Caso Studio</p>
-          <h1>I dati ci sono. Mancava solo qualcuno che li leggesse.</h1>
+        <p class="hero__body">
+          La Regione Lombardia pubblica ogni giorno i pagamenti effettuati tramite
+          <strong>pagamentinlombardia.servizirl.it</strong>, il portale ufficiale del sistema nazionale
+          <strong>pagoPA</strong>. Si tratta di dati aperti, accessibili a chiunque, che documentano in tempo reale i
+          flussi di incasso dei servizi regionali.
+        </p>
+        <p class="hero__body">
+          Il problema è che oltre <strong>mille persone al giorno</strong> consultano questi dati in formato tabellare
+          grezzo: righe e colonne senza contesto, senza tendenze, senza una narrativa che ne riveli il significato.
+          <strong>Questi dati esistono da anni. Nessuno li aveva mai analizzati.</strong>
+        </p>
+        <p class="hero__body">
+          Southwind AI ha costruito un sistema che ogni mattina scarica il dataset aggiornato, lo elabora e genera
+          automaticamente un <strong>report leggibile, strutturato e ricco di insight</strong>, così che chi lavora
+          con questi numeri possa capirli in pochi minuti, non in ore.
+        </p>
 
-          <p class="hero__body">
-            La Regione Lombardia pubblica ogni giorno i pagamenti effettuati tramite
-            <strong>pagamentinlombardia.servizirl.it</strong>, il portale ufficiale del sistema nazionale
-            <strong>pagoPA</strong>. Si tratta di dati aperti, accessibili a chiunque, che documentano in tempo reale i
-            flussi di incasso dei servizi regionali.
-          </p>
-          <p class="hero__body">
-            Il problema è che oltre <strong>mille persone al giorno</strong> consultano questi dati in formato tabellare
-            grezzo: righe e colonne senza contesto, senza tendenze, senza una narrativa che ne riveli il significato.
-          </p>
-          <p class="hero__body">
-            Southwind AI ha costruito un sistema che ogni mattina scarica il dataset aggiornato, lo elabora e genera
-            automaticamente un <strong>report leggibile, strutturato e ricco di insight</strong> — così che chi lavora
-            con questi numeri possa capirli in pochi minuti, non in ore.
-          </p>
+        <div class="cta-group">
+          <a href="{{LATEST_REPORT_URL}}" class="hero__cta hero__cta--primary" target="_blank"
+            rel="noopener noreferrer">Visualizza il report di oggi &rarr;</a>
+          <a href="#compare" class="scroll-next" aria-label="Scorri alla sezione successiva">↓</a>
+        </div>
+      </div>
+    </section>
 
-          <div class="cta-group">
-            <a href="{{LATEST_REPORT_URL}}" class="hero__cta" target="_blank" rel="noopener noreferrer">Visualizza il report di oggi &rarr;</a>
-            <a href="https://dati.lombardia.it" target="_blank" rel="noopener noreferrer" class="hero__cta">Vai alla
-              fonte dei dati &rarr;</a>
+    <!-- ── Before / After Section ── -->
+    <section id="compare" class="section compare">
+      <div class="section__inner">
+        <p class="eyebrow">Prima e dopo</p>
+        <h2 class="compare__title">Da dati grezzi a insight leggibili</h2>
+
+        <div class="compare__grid">
+
+          <!-- LEFT: raw data -->
+          <div class="compare__panel compare__panel--before">
+            <div class="compare__label">
+              <span class="compare__label-dot"></span>
+              Come il dato viene pubblicato
+            </div>
+            <div class="raw-table-wrap">
+              <table class="raw-table">
+                <thead>
+                  <tr>
+                    <th>psp_id</th>
+                    <th>psp_desc</th>
+                    <th>ente_cf</th>
+                    <th>ente_desc</th>
+                    <th>pag_importo</th>
+                    <th>pag_data</th>
+                    <th>tipo_dovuto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>PPAYITR1XXX</td>
+                    <td>Postepay</td>
+                    <td>80050050154</td>
+                    <td>Regione Lombardia</td>
+                    <td>237.56</td>
+                    <td>2026-02-18T08:00:00.000</td>
+                    <td>Tassa auto</td>
+                  </tr>
+                  <tr>
+                    <td>CIPBITMM</td>
+                    <td>Nexi</td>
+                    <td>828590158</td>
+                    <td>Comune di San Donato Milanese</td>
+                    <td>50.45</td>
+                    <td>2026-02-18T08:01:00.000</td>
+                    <td>in_violazione_cds</td>
+                  </tr>
+                  <tr>
+                    <td>BCITITMM</td>
+                    <td>Intesa Sanpaolo S.p.A</td>
+                    <td>85001870188</td>
+                    <td>Comune di Vigevano</td>
+                    <td>29.11</td>
+                    <td>2026-02-18T08:02:00.000</td>
+                    <td>TICKET_SANITARIO</td>
+                  </tr>
+                  <tr>
+                    <td>CIPBITMM</td>
+                    <td>Nexi</td>
+                    <td>3510190121</td>
+                    <td>ASST Valle Olona</td>
+                    <td>140.90</td>
+                    <td>2026-02-18T08:03:00.000</td>
+                    <td>in_violazione_cds</td>
+                  </tr>
+                  <tr>
+                    <td>BCITITMM</td>
+                    <td>Intesa Sanpaolo S.p.A</td>
+                    <td>296180185</td>
+                    <td>Comune di Pavia</td>
+                    <td>103.70</td>
+                    <td>2026-02-18T08:04:00.000</td>
+                    <td>in_violazione_cds</td>
+                  </tr>
+                  <tr>
+                    <td>BCITITMM</td>
+                    <td>Intesa Sanpaolo S.p.A</td>
+                    <td>8558150150</td>
+                    <td>Autostrada Pedemontana Lombarda Spa</td>
+                    <td>50.79</td>
+                    <td>2026-02-18T08:05:00.000</td>
+                    <td>Tassa auto</td>
+                  </tr>
+                  <tr>
+                    <td>PPAYITR1XXX</td>
+                    <td>Postepay</td>
+                    <td>12698710964</td>
+                    <td>Fondazione IRCCS San Gerardo dei Tintori di Monza</td>
+                    <td>57.45</td>
+                    <td>2026-02-18T08:06:00.000</td>
+                    <td>in_violazione_cds</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="raw-table-footer">↓ 14.832 righe totali &nbsp;·&nbsp; nessuna aggregazione &nbsp;·&nbsp; nessun
+              contesto</div>
+            <p class="compare__caption">Dati grezzi: migliaia di righe, nessuna narrativa. Capire cosa
+              sta succedendo richiede ore di lavoro manuale.</p>
           </div>
+
+          <!-- RIGHT: report preview -->
+          <div class="compare__panel compare__panel--after">
+            <div class="compare__label">
+              <span class="compare__label-dot"></span>
+              Come lo rende Southwind AI
+            </div>
+            <div class="report-preview">
+              <div class="rp-header">
+                <p class="rp-date">Martedì 18 febbraio 2026</p>
+                <p class="rp-title">Analisi pagamenti pagoPA Lombardia</p>
+              </div>
+              <div class="rp-kpis">
+                <div class="rp-kpi">
+                  <p class="rp-kpi__label">Transazioni</p>
+                  <p class="rp-kpi__value">14.832</p>
+                </div>
+                <div class="rp-kpi">
+                  <p class="rp-kpi__label">Incassato</p>
+                  <p class="rp-kpi__value">€ 2,84M</p>
+                </div>
+                <div class="rp-kpi">
+                  <p class="rp-kpi__label">Picco orario</p>
+                  <p class="rp-kpi__value">ore 10:00</p>
+                </div>
+              </div>
+              <p class="rp-section-label">Incassi per servizio</p>
+              <div class="rp-bars">
+                <div class="rp-bar-col">
+                  <div class="rp-bar-chart-area">
+                    <span class="rp-bar-pct">38%</span>
+                    <div class="rp-bar-fill" style="height:76px"></div>
+                  </div>
+                  <div class="rp-bar-base"></div>
+                  <span class="rp-bar-name">Ticket sanitari</span>
+                </div>
+                <div class="rp-bar-col">
+                  <div class="rp-bar-chart-area">
+                    <span class="rp-bar-pct">24%</span>
+                    <div class="rp-bar-fill" style="height:48px"></div>
+                  </div>
+                  <div class="rp-bar-base"></div>
+                  <span class="rp-bar-name">Violazioni CDS</span>
+                </div>
+                <div class="rp-bar-col">
+                  <div class="rp-bar-chart-area">
+                    <span class="rp-bar-pct">15%</span>
+                    <div class="rp-bar-fill" style="height:30px"></div>
+                  </div>
+                  <div class="rp-bar-base"></div>
+                  <span class="rp-bar-name">Tassa auto</span>
+                </div>
+                <div class="rp-bar-col">
+                  <div class="rp-bar-chart-area">
+                    <span class="rp-bar-pct">23%</span>
+                    <div class="rp-bar-fill" style="height:46px"></div>
+                  </div>
+                  <div class="rp-bar-base"></div>
+                  <span class="rp-bar-name">Altri servizi</span>
+                </div>
+              </div>
+              <div class="rp-insight">
+                <p class="rp-insight__label">💡 Insight chiave</p>
+                <p class="rp-insight__text">Il 73% degli incassi proviene da soli 3 servizi. I ticket sanitari sono il
+                  servizio più incassato.</p>
+              </div>
+            </div>
+            <p class="compare__caption">Report leggibile, aggregato e ricco di insight. Generato automaticamente ogni
+              mattina in pochi minuti.</p>
+          </div>
+
         </div>
-
-        <div class="landing__right">
-          <p class="eyebrow">Report</p>
-          <h2>Report giornalieri</h2>
-          <p class="archive__subtitle">Ogni giorno un'analisi automatica degli incassi del portale pagoPA Lombardia.</p>
-
-          <ul class="report-list">
-{{REPORT_LIST}}          </ul>
+        <div class="section__scroll">
+          <a href="#difficulty" class="scroll-next" aria-label="Scorri alla sezione successiva">↓</a>
         </div>
+      </div>
+    </section>
 
+    <!-- Why It Was Hard -->
+    <section id="difficulty" class="section difficulty">
+      <div class="section__inner">
+        <p class="eyebrow">Perché nessuno lo faceva</p>
+        <h2 class="section__title">I dati ci sono. Il problema è leggerli.</h2>
+        <p class="hero__body">I dati pagoPA Lombardia sono pubblici da anni, ma trasformarli in insight richiede di
+          superare ostacoli tecnici che rendono l'analisi manuale praticamente impossibile a scala:</p>
+        <ul class="difficulty__list">
+          <li><strong>Volume:</strong> Ogni giorno vengono pubblicati fino a 25.000 transazioni singole, senza alcuna
+            aggregazione precompilata.</li>
+          <li><strong>Formato grezzo:</strong> La comprensione dei dati richiede ore di lavoro manuale.</li>
+          <li><strong>Nessuna serie storica:</strong> Non esiste una versione pre-aggregata, ogni analisi deve
+            ripartire dai record individuali ogni volta.</li>
+          <li><strong>Infrastruttura:</strong> L'API Socrata richiede paginazione, gestione dei retry e normalizzazione
+            per garantire la completezza del dataset.</li>
+        </ul>
+        <div class="difficulty__callout">
+          Southwind AI ha costruito una pipeline che risolve tutto questo <strong>in automatico, ogni mattina, senza
+            intervento umano</strong>, generando un report pronto da leggere in meno di 5 minuti.
+        </div>
+        <div class="section__scroll">
+          <a href="#howto" class="scroll-next" aria-label="Scorri alla sezione successiva">↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="howto" class="section howto">
+      <div class="howto__inner">
+        <p class="eyebrow">Come funziona</p>
+        <h2 class="section__title">Tre passi. Zero intervento manuale.</h2>
+        <ol class="steps">
+          <li class="step">
+            <span class="step__num">01</span>
+            <div class="step__body">
+              <p class="step__title">Acquisizione automatica</p>
+              <p class="step__desc">Ogni mattina il sistema interroga l'API di dati.lombardia.it, scarica l'intero
+                dataset del giorno precedente e lo normalizza gestendo paginazione, retry e pulizia dei dati in modo
+                trasparente.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__num">02</span>
+            <div class="step__body">
+              <p class="step__title">Elaborazione e analisi</p>
+              <p class="step__desc">La pipeline calcola statistiche, trova tendenze e identifica anomalie, costruendo
+                la struttura narrativa del report. Ogni report è unico e personalizzato, non c'è un template
+                predefinito.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__num">03</span>
+            <div class="step__body">
+              <p class="step__title">Report pubblicato</p>
+              <p class="step__desc">Southwind AI genera un report leggibile, ricco di contesto e insight, e lo pubblica
+                automaticamente. Ogni giorno, pronto da consultare in pochi minuti.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="section__scroll">
+          <a href="#archive" class="scroll-next" aria-label="Scorri alla sezione successiva">↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Report Archive -->
+    <section id="archive" class="section archive">
+      <div class="archive__inner">
+        <p class="eyebrow">Archivio</p>
+        <h2>Report giornalieri</h2>
+        <p class="archive__subtitle">La pipeline è in esecuzione ogni giorno. Ogni report qui sotto è stato generato
+          automaticamente, senza intervento umano.</p>
+        <ul class="report-list">
+          {{REPORT_LIST}} </ul>
+        <div class="section__scroll">
+          <a href="#cta" class="scroll-next" aria-label="Scorri alla sezione successiva">↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="cta" class="section dark-cta">
+      <div class="section__inner">
+        <p class="eyebrow">Southwind AI</p>
+        <h2 class="dark-cta__title">Hai un dataset che vuoi trasformare in report automatici?</h2>
+        <p class="dark-cta__body">Raccontaci il tuo caso, ti risponderemo entro 24 ore.</p>
+        <div class="cta-group cta-group--centered">
+          <a href="https://www.southwind.ai/" target="_blank" rel="noopener noreferrer"
+            class="hero__cta hero__cta--white">Scopri Southwind AI &rarr;</a>
+          <a href="mailto:edoardo.spada@southwind.ai" class="hero__cta hero__cta--white-outline">Contattaci</a>
+        </div>
       </div>
     </section>
 
