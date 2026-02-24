@@ -15,6 +15,9 @@ API_KEY = os.getenv("API_KEY", "")
 
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/southwind-ai/studio-regione-lombardia/refs/heads/main/"
 
+REPORT_MAX_RETRIES = 3
+REPORT_BACKOFF_FACTOR = 2  # waits 2, 4, 8, 16... seconds between retries
+
 
 def wait_for_file_availability(file_url, max_attempts=20, delay=5):
     """Wait for a file to be accessible via URL before proceeding."""
@@ -164,7 +167,17 @@ def main():
         data_source_id = create_data_source(file_url)
 
         print("Creating report...")
-        report_id = create_report(data_source_id)
+        report_id = None
+        for attempt in range(1, REPORT_MAX_RETRIES + 1):
+            try:
+                report_id = create_report(data_source_id)
+                break
+            except Exception as e:
+                if attempt == REPORT_MAX_RETRIES:
+                    raise
+                wait = REPORT_BACKOFF_FACTOR ** attempt
+                print(f"Report creation failed (attempt {attempt}/{REPORT_MAX_RETRIES}), retrying in {wait}s: {e}")
+                time.sleep(wait)
 
         print("Report queued with ID:", report_id)
         
