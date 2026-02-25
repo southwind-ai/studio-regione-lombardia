@@ -164,7 +164,17 @@ def main():
 
     try:
         print("Creating data source...")
-        data_source_id = create_data_source(file_url)
+        data_source_id = None
+        for attempt in range(1, REPORT_MAX_RETRIES + 1):
+            try:
+                data_source_id = create_data_source(file_url)
+                break
+            except Exception as e:
+                if attempt == REPORT_MAX_RETRIES:
+                    raise
+                wait = REPORT_BACKOFF_FACTOR ** attempt
+                print(f"Data source creation failed (attempt {attempt}/{REPORT_MAX_RETRIES}), retrying in {wait}s: {e}")
+                time.sleep(wait)
 
         print("Creating report...")
         report_id = None
