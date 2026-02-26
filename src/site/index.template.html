@@ -1017,7 +1017,7 @@
       <div class="hero__inner">
         <p class="eyebrow">Caso Studio</p>
         <h1>Ogni giorno, dati pubblici del portale pagoPA della Regione Lombardia ignorati da tutti.<br>Noi li abbiamo
-          trasformati in insight.</h1>
+          trasformati in informazioni utili.</h1>
 
         <p class="hero__body">
           La Regione Lombardia pubblica ogni giorno i pagamenti effettuati tramite
@@ -1031,10 +1031,11 @@
           <strong>Questi dati esistono da anni. Nessuno li aveva mai analizzati.</strong>
         </p>
         <p class="hero__body">
-          Southwind AI ha costruito un sistema che ogni mattina alle 9 scarica il dataset del giorno precedente, lo
+          Southwind AI ha costruito un sistema che ogni mattina alle 9 scarica l'insieme di dati del giorno precedente,
+          lo
           elabora e
           genera
-          automaticamente un <strong>report leggibile, strutturato e ricco di insight</strong>, così che chi lavora
+          automaticamente un <strong>report leggibile, strutturato e ricco di informazioni</strong>, così che chi lavora
           con questi numeri possa capirli in pochi minuti, non in ore.
         </p>
 
@@ -1050,7 +1051,7 @@
     <section id="compare" class="section compare">
       <div class="section__inner">
         <p class="eyebrow">Prima e dopo</p>
-        <h2 class="compare__title">Da dati grezzi a insight leggibili</h2>
+        <h2 class="compare__title">Da dati grezzi a informazioni utili</h2>
 
         <div class="compare__grid">
 
@@ -1207,12 +1208,13 @@
                 </div>
               </div>
               <div class="rp-insight">
-                <p class="rp-insight__label">💡 Insight chiave</p>
+                <p class="rp-insight__label">💡 Informazioni chiave</p>
                 <p class="rp-insight__text">Il 77% degli incassi proviene da soli 3 servizi. I ticket sanitari sono il
                   servizio più incassato.</p>
               </div>
             </div>
-            <p class="compare__caption">Report leggibile, aggregato e ricco di insight. Generato automaticamente ogni
+            <p class="compare__caption">Report leggibile, aggregato e ricco di informazioni. Generato automaticamente
+              ogni
               mattina in pochi minuti.</p>
           </div>
 
@@ -1228,7 +1230,8 @@
       <div class="section__inner">
         <p class="eyebrow">Perché nessuno lo faceva</p>
         <h2 class="section__title">I dati ci sono. Il problema è leggerli.</h2>
-        <p class="hero__body">I dati pagoPA Lombardia sono pubblici da anni, ma trasformarli in insight richiede di
+        <p class="hero__body">I dati pagoPA Lombardia sono pubblici da anni, ma trasformarli in informazioni utili
+          richiede di
           superare ostacoli tecnici che rendono l'analisi manuale praticamente impossibile a scala:</p>
         <ul class="difficulty__list">
           <li><strong>Volume:</strong> Ogni giorno vengono pubblicati fino a 25.000 transazioni singole, senza alcuna
@@ -1236,11 +1239,13 @@
           <li><strong>Formato grezzo:</strong> La comprensione dei dati richiede ore di lavoro manuale.</li>
           <li><strong>Nessuna serie storica:</strong> Non esiste una versione pre-aggregata, ogni analisi deve
             ripartire dai record individuali ogni volta.</li>
-          <li><strong>Infrastruttura:</strong> L'API Socrata richiede paginazione, gestione dei retry e normalizzazione
-            per garantire la completezza del dataset.</li>
+          <li><strong>Infrastruttura:</strong> L'API Socrata richiede paginazione, gestione dei tentativi di recupero
+            dei dati
+            e normalizzazione per garantire la completezza dell'insieme di dati.</li>
         </ul>
         <div class="difficulty__callout">
-          Southwind AI ha costruito una pipeline che risolve tutto questo <strong>in automatico, ogni mattina, senza
+          Southwind AI ha costruito un sistema dinamico che risolve tutto questo <strong>in automatico, ogni mattina,
+            senza
             intervento umano</strong>, generando un report pronto da leggere in meno di 5 minuti.
         </div>
         <div class="section__scroll">
@@ -1260,7 +1265,9 @@
             <div class="step__body">
               <p class="step__title">Acquisizione automatica</p>
               <p class="step__desc">Ogni mattina il sistema interroga l'API di dati.lombardia.it, scarica l'intero
-                dataset del giorno precedente e lo normalizza gestendo paginazione, retry e pulizia dei dati in modo
+                insieme di dati del giorno precedente e lo normalizza gestendo paginazione, tentativi di recupero e
+                pulizia dei dati in
+                modo
                 trasparente.</p>
             </div>
           </li>
@@ -1268,8 +1275,8 @@
             <span class="step__num">02</span>
             <div class="step__body">
               <p class="step__title">Elaborazione e analisi</p>
-              <p class="step__desc">La pipeline calcola statistiche, trova tendenze e identifica anomalie, costruendo
-                la struttura narrativa del report. Ogni report è unico e personalizzato, non c'è un template
+              <p class="step__desc">Il sistema calcola statistiche, trova tendenze e identifica anomalie, costruendo
+                la struttura narrativa del report. Ogni report è unico e personalizzato, non c'è un modello
                 predefinito.</p>
             </div>
           </li>
@@ -1277,7 +1284,8 @@
             <span class="step__num">03</span>
             <div class="step__body">
               <p class="step__title">Report pubblicato</p>
-              <p class="step__desc">Southwind AI genera un report leggibile, ricco di contesto e insight, e lo pubblica
+              <p class="step__desc">Southwind AI genera un report leggibile, ricco di contesto e informazioni, e lo
+                pubblica
                 automaticamente. Ogni giorno, pronto da consultare in pochi minuti.</p>
             </div>
           </li>
@@ -1293,7 +1301,7 @@
       <div class="archive__inner">
         <p class="eyebrow">Archivio</p>
         <h2>Report giornalieri</h2>
-        <p class="archive__subtitle">La pipeline è in esecuzione ogni giorno. Ogni report qui sotto è stato generato
+        <p class="archive__subtitle">Il sistema è in esecuzione ogni giorno. Ogni report qui sotto è stato generato
           automaticamente, senza intervento umano.</p>
         <ul class="report-list">
           {{REPORT_LIST}} </ul>
@@ -1309,9 +1317,9 @@
         <p class="eyebrow">Southwind AI</p>
         <p class="eyebrow">Siamo tre ingegneri informatici del Politecnico di Milano che aiutano le aziende a
           trasformare i
-          dati in insight.
+          dati in informazioni utili.
         </p>
-        <h2 class="dark-cta__title">Hai un dataset che vuoi trasformare in report automatici?</h2>
+        <h2 class="dark-cta__title">Hai un insieme di dati che vuoi trasformare in report automatici?</h2>
         <p class="dark-cta__body">Raccontaci il tuo caso, ti risponderemo entro 24 ore.</p>
         <div class="cta-group cta-group--centered">
           <a href="https://www.southwind.ai/" target="_blank" rel="noopener noreferrer"
