@@ -75,7 +75,7 @@ def create_data_source(file_url):
         headers["X-API-Key"] = API_KEY
     
     response = requests.post(
-        f"{API_BASE}/v1/data-sources/file/",
+        f"{API_BASE}/v1/origins/file/",
         headers=headers,
         json={
             "files": [
