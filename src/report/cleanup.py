@@ -23,7 +23,7 @@ def get_all_data_sources():
         headers["X-API-Key"] = API_KEY
     
     response = requests.get(
-        f"{API_BASE}/v1/data-sources/",
+        f"{API_BASE}/v1/sources/",
         headers=headers,
     )
     
@@ -46,7 +46,7 @@ def delete_data_sources(data_source_ids):
         headers["X-API-Key"] = API_KEY
     
     response = requests.delete(
-        f"{API_BASE}/v1/data-sources/",
+        f"{API_BASE}/v1/sources/",
         headers=headers,
         json={"ids": data_source_ids},
     )
