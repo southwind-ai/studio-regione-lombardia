@@ -202,7 +202,7 @@ def main():
         
     except Exception as e:
         print(f"Error occurred: {e}")
-        print(f"Not deleting {csv_file}: keeping dataset for debugging.")
+        delete_file_from_repo(csv_file)
         sys.exit(1)
 
 
