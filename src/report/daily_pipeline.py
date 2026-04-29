@@ -116,24 +116,28 @@ def create_report(data_source_id):
     if API_KEY:
         headers["X-API-Key"] = API_KEY
     
+    payload = {
+        "agent_id": "custom_report",
+        "data_sources_ids": [data_source_id],
+        "params": {
+            "language": "italian",
+            "currency": "EUR",
+            "color": "",
+            "prompt": "Analizza i dati dei pagamenti effettuati tramite il portale pagamentinlombardia.servizirl.it per il sistema pagoPA nella data odierna.",
+            "dataset_info": "",
+            "data_provenance": False,
+        },
+        "improve_prompt": True,
+    }
+
     response = requests.post(
         f"{API_BASE}/v1/reports/",
         headers=headers,
-        json={
-            "data_sources_ids": [data_source_id],
-            "params": {
-                "language": "italian",
-                "currency": "EUR",
-                "prompt": "Analizza i dati dei pagamenti effettuati tramite il portale pagamentinlombardia.servizirl.it per il sistema pagoPA nella data odierna.",
-                "dataset_info": "",
-                "data_provenance": False,
-            },
-            "improve_prompt": True,
-        },
+        json=payload,
     )
 
     if response.status_code != 201:
-        error_msg = f"Report creation failed: {response.text}"
+        error_msg = f"Report creation failed (status {response.status_code}): {response.text}"
         print(error_msg)
         raise Exception(error_msg)
 
@@ -198,7 +202,7 @@ def main():
         
     except Exception as e:
         print(f"Error occurred: {e}")
-        delete_file_from_repo(csv_file)
+        print(f"Not deleting {csv_file}: keeping dataset for debugging.")
         sys.exit(1)
 
 
